@@ -43,6 +43,7 @@ type BannersRequest struct {
 
 type bannerService struct{}
 
+//GetBanner is for client get reasonable banner by client id, lang, size
 func (s bannerService) GetBanner(ctx context.Context) {
 
 }
