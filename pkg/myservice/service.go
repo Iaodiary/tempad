@@ -3,6 +3,8 @@ package myservice
 import (
 	"context"
 	"reflect"
+
+	"jf/adservice/models"
 )
 
 //BannerService should supply interface to get banner/banners by size,website, group_id
@@ -26,15 +28,15 @@ import (
 //Client must get user whether active, and sent heartbeat every 3 seconds
 //It can help us to calculate put how much banners on it, and banner switch interval
 type AdService interface {
-	GetBanner(ctx context.Context)
+	//GetBanner(ctx context.Context)
 	GetBanners(ctx context.Context)
 }
 
 //BannerRequest convert request to struct BannerRequest
 type BannerRequest struct {
-	GroupID int    `json:"group_id"`
-	Size    string `json:"size"`
-	Lang    string `json:"lang"`
+	ClientID int    `p:"client_id"`
+	Size     string `p:"size"`
+	//Lang    string `json:"lang"`
 }
 
 //BannersRequest is
@@ -48,23 +50,19 @@ func (s bannerService) GetBanner(ctx context.Context) {
 
 }
 
-func (s bannerService) getPopularBanner(ctx context.Context) {
+//GetBanners is func
+func GetBanners(ctx context.Context, clientID int, size string) ([]*models.Banner, error) {
+	var banners []*models.Banner
+	if clientID <= 0 {
+		return banners, nil // create error
+	}
+	groupId := models.GetBannerGroupByClient(clientID)
 
+	banners, err := GetBanners(size, groupId)
+	return banners, err
 }
 
-func matchBannerSize(width, height int)
-	// width, height
-	sizeArr := [...][2]int{
-		{120, 60},
-		{200, 300},
-		{1200, 60},
-		{120, 70},
-	}
-	currentRatio := width/height
-	for sizeArr range size {
-		size[]
-	}
-
+func (s bannerService) getPopularBanner(ctx context.Context) {
 
 }
 

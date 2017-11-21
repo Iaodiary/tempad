@@ -16,9 +16,10 @@ func TestGetBannerByID(t *testing.T) {
 	}
 }
 
-func TestGetBannersBySize(t *testing.T) {
+func TestGetBanners(t *testing.T) {
 	size := "40*50"
-	banners, err := GetBannersBySize(size)
+	groupId := 1
+	banners, err := GetBanners(size, groupId)
 	if err != nil {
 		t.Error(err)
 		t.FailNow()
