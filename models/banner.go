@@ -23,9 +23,9 @@ func GetBannerByID(id int) (Banner, error) {
 }
 
 //GetBannersBySize Get Banners By Size
-func GetBannersBySize(size string) ([]*Banner, error) {
+func GetBanners(size string, groupId int) ([]*Banner, error) {
 	var banners []*Banner
-	rows, err := db.Query("SELECT id,group_id, name, size, url FROM gw_adv_banner  WHERE status=1 AND size=?", size)
+	rows, err := db.Query("SELECT id,group_id, name, size, url FROM gw_adv_banner  WHERE status=1 AND size=? AND group_id=?", size, groupId)
 	defer rows.Close()
 	if err != nil {
 		return banners, err
@@ -39,4 +39,19 @@ func GetBannersBySize(size string) ([]*Banner, error) {
 		banners = append(banners, b)
 	}
 	return banners, nil
+}
+
+//ClientBanner relationship
+type ClientBanner struct {
+	ClientID int
+	GroupID  int
+}
+
+func GetBannerGroupByClient(id int) int {
+	return 1
+}
+
+type Client struct {
+	ID         int
+	ClientName string
 }
