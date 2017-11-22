@@ -1,10 +1,11 @@
 package myservice
 
 import (
-  "context"
+	"context"
+
+	"jf/adservice/models"
 
 	"github.com/go-kit/kit/log"
-  "jf/adservice/models"
 )
 
 //Middleware describe a service (as opposed to endpoint) endpoint
@@ -23,9 +24,9 @@ type loggingMiddleware struct {
 	next   AdService
 }
 
-func (mw loggingMiddleware) GetBanners(ctx context.Context, clientID int, size string) (banners []*models.Banner, err error){
-  defer func(){
-    mw.logger.Log("method", "GetBanners", "clientID", clientID, "size", size, "banners", banners, "err", err)
-  }
-  return GetBanners(ctx, clientID, size)
+func (mw loggingMiddleware) GetBanners(ctx context.Context, clientID int, size string) (banners []*models.Banner, err error) {
+	defer func() {
+		mw.logger.Log("method", "GetBanners", "clientID", clientID, "size", size, "banners", banners, "err", err)
+	}()
+	return GetBanners(ctx, clientID, size)
 }

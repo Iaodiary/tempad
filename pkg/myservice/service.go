@@ -7,7 +7,7 @@ import (
 	"jf/adservice/models"
 )
 
-//BannerService should supply interface to get banner/banners by size,website, group_id
+//AdService should supply interface to get banner/banners by size,website, group_id
 //And it's depend what param client send
 //condition1 : (group_id, size, en)
 //condition2 : (website, size, en)
@@ -29,7 +29,7 @@ import (
 //It can help us to calculate put how much banners on it, and banner switch interval
 type AdService interface {
 	//GetBanner(ctx context.Context)
-	GetBanners(ctx context.Context)
+	GetBanners(ctx context.Context, clientID int, size string) ([]*models.Banner, error)
 }
 
 //BannerRequest convert request to struct BannerRequest
@@ -56,9 +56,9 @@ func GetBanners(ctx context.Context, clientID int, size string) ([]*models.Banne
 	if clientID <= 0 {
 		return banners, nil // create error
 	}
-	groupId := models.GetBannerGroupByClient(clientID)
+	groupID := models.GetBannerGroupByClient(clientID)
 
-	banners, err := GetBanners(size, groupId)
+	banners, err := models.GetBanners(size, groupID)
 	return banners, err
 }
 
