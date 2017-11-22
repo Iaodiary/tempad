@@ -31,6 +31,28 @@
 		{
 			"path": "github.com/go-stack/stack",
 			"revision": ""
+		},
+		{
+			"checksumSHA1": "YS2Hkq13J4fMkBjMmkwEJzkqYMY=",
+			"path": "github.com/kr/logfmt",
+			"revision": "b84e30acd515aadc4b783ad4ff83aff3299bdfe0",
+			"revisionTime": "2014-02-26T03:06:59Z"
+		},
+		{
+			"checksumSHA1": "fOJ0Dq5bMAWizM9gpVEgGpEOvUU=",
+			"path": "github.com/opentracing/opentracing-go",
+			"revision": "1361b9cd60be79c4c3a7fa9841b3c132e40066a7",
+			"revisionTime": "2017-10-03T13:35:19Z"
+		},
+		{
+			"checksumSHA1": "Xtw8Y/mGT602XwYnbOooUz9uYxU=",
+			"path": "github.com/opentracing/opentracing-go/log",
+			"revision": "1361b9cd60be79c4c3a7fa9841b3c132e40066a7",
+			"revisionTime": "2017-10-03T13:35:19Z"
+		},
+		{
+			"path": "golang.org/x/net/context",
+			"revision": ""
 		}
 	],
 	"rootPath": "jf/adservice"

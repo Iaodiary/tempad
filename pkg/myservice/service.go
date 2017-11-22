@@ -5,6 +5,9 @@ import (
 	"reflect"
 
 	"jf/adservice/models"
+
+	"github.com/go-kit/kit/log"
+	"github.com/go-kit/kit/metrics"
 )
 
 //AdService should supply interface to get banner/banners by size,website, group_id
@@ -43,15 +46,27 @@ type BannerRequest struct {
 type BannersRequest struct {
 }
 
-type bannerService struct{}
-
-//GetBanner is for client get reasonable banner by client id, lang, size
-func (s bannerService) GetBanner(ctx context.Context) {
-
+//New returns a basic AdService with all the expected middlewares wired in
+func New(logger log.Logger, counts metrics.Counter) AdService {
+	var ads AdService
+	{
+		ads = NewBasicService()
+		ads = LoggingMiddleware(logger)(ads)
+		ads = InstrumentingMiddleware(counts)(ads)
+	}
+	return ads
 }
 
+//NewBasicService returns a naive, stateless implementation of AdService
+func NewBasicService() AdService {
+	return basicAdService{}
+}
+
+//An AdService interface of implementation
+type basicAdService struct{}
+
 //GetBanners is func
-func GetBanners(ctx context.Context, clientID int, size string) ([]*models.Banner, error) {
+func (s basicAdService) GetBanners(ctx context.Context, clientID int, size string) ([]*models.Banner, error) {
 	var banners []*models.Banner
 	if clientID <= 0 {
 		return banners, nil // create error
@@ -60,10 +75,6 @@ func GetBanners(ctx context.Context, clientID int, size string) ([]*models.Banne
 
 	banners, err := models.GetBanners(size, groupID)
 	return banners, err
-}
-
-func (s bannerService) getPopularBanner(ctx context.Context) {
-
 }
 
 // Check a variable if empty or not
