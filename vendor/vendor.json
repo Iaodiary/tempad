@@ -1,6 +1,6 @@
 {
 	"comment": "",
-	"ignore": "test appengine google.golang.org/grpc/metadata",
+	"ignore": "test appengine",
 	"package": [
 		{
 			"checksumSHA1": "j02c9k8SaVg5BKfjgHl58wA29ik=",
