@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 	"os"
-	"http"
+	"net/http"
 
 	"github.com/go-kit/kit/log"
 	"github.com/go-kit/kit/metrics"
@@ -12,6 +12,7 @@ import (
 	stdprometheus "github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"jf/adservice/pkg/myservice"
+	"jf/adservice/pkg/myendpoint"
 )
 
 const (
@@ -73,7 +74,8 @@ func main() {
 	//them to ports or anything yet; we'll do that next.
 	var (
 		adservice = myservice.New(logger, counts)
-		endpoints =
+		endpoints = myendpoint.New(adservice, logger, duration, tracer)
+
 	)
 
 
