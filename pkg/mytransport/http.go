@@ -10,7 +10,6 @@ import (
 	"net/url"
 	"strings"
 	"time"
-	"yikeshome/go-kit-demo/addsvc-e/pkg/addservice"
 
 	"github.com/go-kit/kit/circuitbreaker"
 	"github.com/go-kit/kit/endpoint"
@@ -73,19 +72,19 @@ func NewHTTPClient(instance string, tracer stdopentracing.Tracer, logger log.Log
 			decodeHTTPGetBannersResponse,
 			httptransport.ClientBefore(opentracing.ContextToHTTP(tracer, logger)),
 		).Endpoint()
-		getBannersEndpoint = opentracing.TraceClient(tracer, "Sum")(sumEndpoint)
+		getBannersEndpoint = opentracing.TraceClient(tracer, "GetBanners")(sumEndpoint)
 		getBannersEndpoint = limiter(sumEndpoint)
 		getBannersEndpoint = circuitbreaker.Gobreaker(gobreaker.NewCircuitBreaker(gobreaker.Settings{
-			Name:    "Sum",
+			Name:    "GetBanners",
 			Timeout: 30 * time.Second,
-		}))(sumEndpoint)
+		}))(getBannersEndpoint)
 	}
 
 	// Returning the endpoint.Set as a service.Service relies on the
 	// endpoint.Set implementing the Service methods. That's just a simple bit
 	// of glue code.
 	return myendpoint.Set{
-		Ge: sumEndpoint,
+		GetBannersEndpoint: getBannersEndpoint,
 	}, nil
 }
 
@@ -101,10 +100,9 @@ func errorEncoder(_ context.Context, err error, w http.ResponseWriter) {
 }
 
 func err2code(err error) int {
-	switch err {
-	case addservice.ErrTwoZeroes, addservice.ErrMaxSizeExceeded, addservice.ErrIntOverflow:
-		return http.StatusBadRequest
-	}
+	//if err != nil {
+	//	return http.StatusBadRequest
+	//}
 	return http.StatusInternalServerError
 }
 

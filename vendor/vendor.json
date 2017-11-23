@@ -1,10 +1,24 @@
 {
 	"comment": "",
-	"ignore": "test",
+	"ignore": "test appengine google.golang.org/grpc/metadata",
 	"package": [
 		{
-			"path": "appengine/cloudsql",
-			"revision": ""
+			"checksumSHA1": "j02c9k8SaVg5BKfjgHl58wA29ik=",
+			"path": "github.com/afex/hystrix-go/hystrix",
+			"revision": "f118cd938f786d24f46cc307981d8f63b7951020",
+			"revisionTime": "2017-08-15T23:46:12Z"
+		},
+		{
+			"checksumSHA1": "1lMIxRpk563mKLwm5kubvCStPiQ=",
+			"path": "github.com/afex/hystrix-go/hystrix/metric_collector",
+			"revision": "f118cd938f786d24f46cc307981d8f63b7951020",
+			"revisionTime": "2017-08-15T23:46:12Z"
+		},
+		{
+			"checksumSHA1": "zvTFzUDEbqdLVZtgf80p/V60Mf4=",
+			"path": "github.com/afex/hystrix-go/hystrix/rolling",
+			"revision": "f118cd938f786d24f46cc307981d8f63b7951020",
+			"revisionTime": "2017-08-15T23:46:12Z"
 		},
 		{
 			"checksumSHA1": "NnkTbiudqJqy6K7FSOL/OU4VxdI=",
@@ -45,13 +59,35 @@
 			"revisionTime": "2017-10-03T13:35:19Z"
 		},
 		{
+			"checksumSHA1": "j09KLtaK3SVvS3hSKjI4kUvhWPY=",
+			"path": "github.com/opentracing/opentracing-go/ext",
+			"revision": "1361b9cd60be79c4c3a7fa9841b3c132e40066a7",
+			"revisionTime": "2017-10-03T13:35:19Z"
+		},
+		{
 			"checksumSHA1": "Xtw8Y/mGT602XwYnbOooUz9uYxU=",
 			"path": "github.com/opentracing/opentracing-go/log",
 			"revision": "1361b9cd60be79c4c3a7fa9841b3c132e40066a7",
 			"revisionTime": "2017-10-03T13:35:19Z"
 		},
 		{
+			"checksumSHA1": "bGo3AveLqYTbdOuXHh+wRi3Ytgk=",
+			"path": "github.com/sony/gobreaker",
+			"revision": "3cb67c77c1d1e72fda30c6970578164d24f806b6",
+			"revisionTime": "2017-11-08T10:09:24Z"
+		},
+		{
+			"checksumSHA1": "pmY/+oD/m4JZNSfK70dr2hCkLlk=",
+			"path": "github.com/streadway/handy/breaker",
+			"revision": "f450267a206e480d863d2a92846a40f6e2896b2a",
+			"revisionTime": "2016-04-02T20:03:21Z"
+		},
+		{
 			"path": "golang.org/x/net/context",
+			"revision": ""
+		},
+		{
+			"path": "google.golang.org/grpc/metadata",
 			"revision": ""
 		}
 	],
