@@ -63,11 +63,13 @@ func MakeGetBannersEndpoint(s myservice.AdService) endpoint.Endpoint {
 	}
 }
 
+//GetBannersRequest service standard request
 type GetBannersRequest struct {
 	ClientID int
 	Size     string
 }
 
+//GetBannersResponse service standard response
 type GetBannersResponse struct {
 	V   []*models.Banner
 	Err error

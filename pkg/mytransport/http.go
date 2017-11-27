@@ -11,6 +11,8 @@ import (
 	"strings"
 	"time"
 
+	stdopentracing "github.com/opentracing/opentracing-go"
+
 	"github.com/go-kit/kit/circuitbreaker"
 	"github.com/go-kit/kit/endpoint"
 	"github.com/go-kit/kit/log"
@@ -24,15 +26,18 @@ import (
 	"jf/adservice/pkg/myservice"
 )
 
+// NewHTTPHandler returns an HTTP handler that makes a set of endpoints
+// available on predefined paths.
 func NewHTTPHandler(endpoints myendpoint.Set, tracer stdopentracing.Tracer, logger log.Logger) http.Handler {
 	options := []httptransport.ServerOption{
-		httptransport.ServerOption(errorEncoder),
+		httptransport.ServerErrorEncoder(errorEncoder),
 		httptransport.ServerErrorLogger(logger),
 	}
 	m := http.NewServeMux()
 	m.Handle("/banners", httptransport.NewServer(
 		endpoints.GetBannersEndpoint,
 		decodeHTTPGetBannersRequest,
+		encodeHTTPGenericResponse,
 		append(options, httptransport.ServerBefore(opentracing.HTTPToContext(tracer, "GetBanners", logger)))...,
 	))
 	return m
@@ -72,8 +77,8 @@ func NewHTTPClient(instance string, tracer stdopentracing.Tracer, logger log.Log
 			decodeHTTPGetBannersResponse,
 			httptransport.ClientBefore(opentracing.ContextToHTTP(tracer, logger)),
 		).Endpoint()
-		getBannersEndpoint = opentracing.TraceClient(tracer, "GetBanners")(sumEndpoint)
-		getBannersEndpoint = limiter(sumEndpoint)
+		getBannersEndpoint = opentracing.TraceClient(tracer, "GetBanners")(getBannersEndpoint)
+		getBannersEndpoint = limiter(getBannersEndpoint)
 		getBannersEndpoint = circuitbreaker.Gobreaker(gobreaker.NewCircuitBreaker(gobreaker.Settings{
 			Name:    "GetBanners",
 			Timeout: 30 * time.Second,
@@ -119,7 +124,7 @@ type errorWrapper struct {
 }
 
 func decodeHTTPGetBannersRequest(_ context.Context, r *http.Request) (interface{}, error) {
-	var req myendpoint.SumRequest
+	var req myendpoint.GetBannersRequest
 	err := json.NewDecoder(r.Body).Decode(&req)
 	return req, err
 }
@@ -133,7 +138,7 @@ func decodeHTTPGetBannersResponse(_ context.Context, r *http.Response) (interfac
 	if r.StatusCode != http.StatusOK {
 		return nil, errors.New(r.Status)
 	}
-	var resp myendpoint.GetBanner
+	var resp myendpoint.GetBannersResponse
 	err := json.NewDecoder(r.Body).Decode(&resp)
 	return resp, err
 }
