@@ -35,7 +35,7 @@ func New(ads myservice.AdService, logger log.Logger, duration metrics.Histogram,
 		//
 		getBannersEndpoint = MakeGetBannersEndpoint(ads)
 		//getBannersEndpoint = ratelimit.NewErroringLimiter(rate.NewLimiter(rate.Every(time.Second), 1))(getBannersEndpoint)
-		getBannersEndpoint = ratelimit.NewErroringLimiter(rate.NewLimiter(rate.Every(time.Second), 1))(getBannersEndpoint)
+		getBannersEndpoint = ratelimit.NewErroringLimiter(rate.NewLimiter(rate.Every(time.Second), 100))(getBannersEndpoint)
 		getBannersEndpoint = circuitbreaker.Gobreaker(gobreaker.NewCircuitBreaker(gobreaker.Settings{}))(getBannersEndpoint)
 		getBannersEndpoint = opentracing.TraceServer(trace, "GetBanners")(getBannersEndpoint)
 		getBannersEndpoint = InstrumentingMiddleware(duration.With("method", "GetBanners"))(getBannersEndpoint)
@@ -71,6 +71,6 @@ type GetBannersRequest struct {
 
 //GetBannersResponse service standard response
 type GetBannersResponse struct {
-	V   []*models.Banner
-	Err error
+	V   []*models.Banner `json:"v"`
+	Err error            `json:"-"`
 }

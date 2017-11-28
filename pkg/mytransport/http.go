@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"strconv"
 	"strings"
 	"time"
 
@@ -108,7 +109,9 @@ func err2code(err error) int {
 	//if err != nil {
 	//	return http.StatusBadRequest
 	//}
-	return http.StatusInternalServerError
+	return http.StatusBadRequest
+
+	//return http.StatusInternalServerError
 }
 
 func errorDecoder(r *http.Response) error {
@@ -125,7 +128,17 @@ type errorWrapper struct {
 
 func decodeHTTPGetBannersRequest(_ context.Context, r *http.Request) (interface{}, error) {
 	var req myendpoint.GetBannersRequest
-	err := json.NewDecoder(r.Body).Decode(&req)
+	var err error
+
+	if "GET" == r.Method {
+		req.ClientID, err = strconv.Atoi(r.FormValue("client"))
+		req.Size = r.FormValue("size")
+	} else {
+		err = json.NewDecoder(r.Body).Decode(&req)
+		if nil != err {
+			err = errors.New("json-decode:" + err.Error())
+		}
+	}
 	return req, err
 }
 
@@ -154,7 +167,14 @@ func encodeHTTPGenericRequest(_ context.Context, r *http.Request, request interf
 	return nil
 }
 
+//encodeHTTPGenericResponse is a transport/http.EncodeResponseFunc that
+//Json-encodes any reponse to response result.
 func encodeHTTPGenericResponse(ctx context.Context, w http.ResponseWriter, response interface{}) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	return json.NewEncoder(w).Encode(response)
+}
+
+func encodeHTTPHtmlResponse(ctx context.Context, w http.ResponseWriter, response interface{}) error {
+	w.Header().Set("Context-Type", "text/html; charset=utf-8")
 	return json.NewEncoder(w).Encode(response)
 }

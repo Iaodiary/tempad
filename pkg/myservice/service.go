@@ -2,6 +2,7 @@ package myservice
 
 import (
 	"context"
+	"errors"
 	"reflect"
 
 	"jf/adservice/models"
@@ -74,6 +75,9 @@ func (s basicAdService) GetBanners(ctx context.Context, clientID int, size strin
 	groupID := models.GetBannerGroupByClient(clientID)
 
 	banners, err := models.GetBanners(size, groupID)
+	if len(banners) == 0 {
+		err = errors.New("No match banners")
+	}
 	return banners, err
 }
 

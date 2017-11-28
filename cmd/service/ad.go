@@ -23,16 +23,11 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
-const (
-	defaultPort = "80"
-)
-
 func main() {
 	fs := flag.NewFlagSet("ad", flag.ExitOnError)
 	var (
-		debugAddr = fs.String("debug.addr", ":8080", "Debug and metrics listen address")
-		port      = envString("PORT", defaultPort)
-		httpAddr  = flag.String("http.addr", ":"+port, "HTTP listen Ports")
+		debugAddr = fs.String("debug.addr", ":8081", "Debug and metrics listen address")
+		httpAddr  = fs.String("http-addr", ":8081", "HTTP listen address")
 	)
 	fs.Usage = usageFor(fs, os.Args[0]+" [flags]")
 	fs.Parse(os.Args[1:])
